@@ -11,47 +11,38 @@
 
 _Laravel Boilerplate_ provides a very flexible and extensible way of building your custom Laravel 5 applications.
 
-## Features
-- Administration Dashboard with [Gentelella Admin Theme](https://github.com/puikinsh/gentelella)
-- Responsive Layout
-- Bootstrap 3
-- Font Awesome
-- Socialite Integration
-- MySQL, SQLite, PostgreSQL databases support
-- AWS S3 support
-- Google Analytics support in frontend
-    - Configuration can be easily made via ```analytics.php``` and template ```ga.blade.php```
-- Automatic errors feedback via eMail
-- i18n support and automatic user client language recognition
-- Helper class ```ToJs``` to ease work with JavaScript variables using blade directive ```@tojs```
-- Helper class ```Meta``` blade directive ```@meta``` to ease work with meta tags & properties
-- Models for Users and Roles
-- Added Auth controller to allow registration activation by email
-- Extended Auth configuration by:
-    - Ability to switch on/off user registration
-    - Set up default user role
-    - Ability to switch on/off registration activation email
-    - Captcha configuration
-- Gravatar support in User model and flexible configuration via ```gravatar.php```
-- Added library log viewer to allow printing errors in a log file ```laravel.log```
-- Added library sortable for tables sorting
-- i18n: ```trans()``` method replaced by ```__()``` in order to support internationalization via JSON resources
-- Registration using social services (Google+, Facebook, Twitter)
-- Storing last social login in user session
-- Added event on SocialLogin
-- Added listeners on some events; e.g. Login, Logout, Registration, SocialLogin
-- Added notification ```ConfirmEmail``` on user account confirmation
-- Added policies to access backend services
-- Added database seeders for Users, Roles, and UserRoles
-- Improved migration ```create_users_table.php```; fields added active, confirm and deleted_at for soft deletion
-- JavaScript / CSS minification
-- JavaScript / CSS hashing
-- Some very useful helper functions to ease your live :)
+## MAIL OPTIONS error ssl
+C:\projectname\vendor\swiftmailer\swiftmailer\lib\classes\Swift\Transport\StreamBuffer.php
+and find out this function inside StreamBuffer.php
 
-## Theme Demo
-![Gentelella Bootstrap Admin Template](https://cdn.colorlib.com/wp/wp-content/uploads/sites/2/gentelella-admin-template-preview.jpg "Gentelella Theme Browser Preview")
+private function _establishSocketConnection()
+and paste this two lines inside of this function
 
-**[Gentelella Admin Theme Demo](https://colorlib.com/polygon/gentelella/index.html)**
+$options['ssl']['verify_peer'] = FALSE;
+$options['ssl']['verify_peer_name'] = FALSE;
+and reload your browser and try to run your project again. For me I put on like this:
+
+```
+private function _establishSocketConnection()
+{
+    $host = $this->_params['host'];
+    if (!empty($this->_params['protocol'])) {
+        $host = $this->_params['protocol'].'://'.$host;
+    }
+    $timeout = 15;
+    if (!empty($this->_params['timeout'])) {
+        $timeout = $this->_params['timeout'];
+    }
+    $options = array();
+    if (!empty($this->_params['sourceIp'])) {
+        $options['socket']['bindto'] = $this->_params['sourceIp'].':0';
+    }
+
+   $options['ssl']['verify_peer'] = FALSE;
+    $options['ssl']['verify_peer_name'] = FALSE;
+}
+```
+
 
 ## Minimum System Requirements
 To be able to run Laravel Boilerplate you have to meet the following requirements:
@@ -93,82 +84,3 @@ $ php artisan migrate --seed
 ```
 If you get an error like a `PDOException` try editing your `.env` file and change `DB_HOST=localhost` to `DB_HOST=127.0.0.1`.
 
-## Run
-
-To start the PHP built-in server
-```
-$ php artisan serve --port=8080
-or
-$ php -S localhost:8080 -t public/
-```
-
-Now you can browse the site [http://localhost:8080](https://photolancer.zone)  🙌
-
-## Docker
-
-Tere is a Docker based local development environment prepared, which provides a very flexible and extensible way of building your custom Laravel 5 applications.
-
-### What's Inside
-This project is based on [docker-compose](https://docs.docker.com/compose/). By default, the following containers are started: _laravel-env, mysql, nginx_. The `/laravel` directory is the web root which is mapped to the nginx container.
-You can directly edit configuration files from within the repo as they are mapped to the correct locations in containers.
-
-### Minimum System Requirements
-To be able to run Laravel Boilerplate you have to meet the following requirements:
-* [docker](https://www.docker.com)
-* [docker-compose](https://docs.docker.com/compose/)
-
-### Run
-
-Clone repository
-```
-$ git clone https://github.com/Labs64/laravel-boilerplate.git
-```
-
-To start environment
-```
-$ docker-compose up -d
-```
-
-Now you can browse the site [http://localhost:80](https://photolancer.zone)  🙌
-
-To stop environment
-```
-$ docker-compose down
-```
-
-### Useful commands
-
-List docker processes
-```
-$ docker ps
-```
-
-List docker processes
-```
-$ docker exec -it <CONTAINER ID|CONTAINER NAME> bash
-```
-
-Verify available databases
-```
-# mysql -u root -p laravel_boilerplate
-mysql> show databases;
-```
-
-Remove all docker-compose images
-```
-$ docker-compose rm -v
-```
-
-## How to contribute
-
-Fork the repository, read the [CONTRIBUTE](CONTRIBUTE.md) file and make some changes.
-Once you're done with your changes send a pull request and check [CI validation status](https://travis-ci.org/Labs64/laravel-boilerplate).
-Thanks!
-
-## Bugs and Feedback
-
-For bugs, questions and discussions please use the [GitHub Issues](https://github.com/Labs64/laravel-boilerplate/issues).
-
-## License
-
-This boilerplate is open-sourced software licensed under the [MIT license](LICENSE).
